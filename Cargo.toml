@@ -1,0 +1,18 @@
+[workspace]
+members = [
+    "kernels/blitz-embedding",
+    "kernels/blitz-attention",
+    "kernels/blitz-kv-cache",
+    "kernels/blitz-layernorm-gelu",
+    "kernels/blitz-rope",
+    "kernels/blitz-fused-mlp",
+    "kernels/blitz-swiglu",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "LicenseRef-BlitzKernels-Commercial"
+authors = ["TeamADAPT <hello@teamadapt.dev>"]
+repository = "https://github.com/TeamADAPT/blitzkernels"
+
