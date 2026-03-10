@@ -3,6 +3,7 @@
 > Production WASM inference kernels for edge AI — built in Rust, compiled to `wasm32-wasip2`.  
 > Deploy on Cloudflare Workers, wasmCloud, or any WASI runtime. No GPU required at the edge.
 
+[![CI](https://github.com/TeamADAPT/blitzkernels/actions/workflows/ci.yml/badge.svg)](https://github.com/TeamADAPT/blitzkernels/actions/workflows/ci.yml)
 [![license: commercial](https://img.shields.io/badge/license-commercial-blue)](https://blitzkernels.pages.dev)
 [![built with Rust](https://img.shields.io/badge/built_with-Rust-orange)](https://www.rust-lang.org)
 [![target: wasm32-wasip2](https://img.shields.io/badge/target-wasm32--wasip2-purple)](https://wasi.dev)
