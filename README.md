@@ -7,7 +7,7 @@
 [![built with Rust](https://img.shields.io/badge/built_with-Rust-orange)](https://www.rust-lang.org)
 [![target: wasm32-wasip2](https://img.shields.io/badge/target-wasm32--wasip2-purple)](https://wasi.dev)
 
-## Kernel Catalog — 8 Kernels Available
+## Kernel Catalog — 9 Kernels Available
 
 | Kernel | Description | Use Case |
 |--------|-------------|----------|
@@ -18,6 +18,7 @@
 | `blitz-rope` | Rotary position embeddings (RoPE) | LLaMA/Mistral position encoding |
 | `blitz-fused-mlp` | Fused Linear→LayerNorm→GELU→Linear | Full FFN block (GPT-style) |
 | `blitz-swiglu` | SwiGLU gated activation | LLaMA 2/3, Mistral FFN |
+| `blitz-rmsnorm` | RMS LayerNorm (no mean subtraction) | LLaMA/Mistral/Gemma normalization |
 | `cc-faculty-wasm` | Claude Code cognitive substrate | Agent memory + reasoning integration |
 
 **[→ View full catalog and pricing](https://blitzkernels.pages.dev)**
@@ -67,18 +68,30 @@ let config = SwiGluConfig { d_model: 4096, d_ff: 11008 };  // LLaMA-7B dims
 let output = swiglu_forward(&x, &gate_weight, &up_weight, &down_weight, &config);
 ```
 
+### RMSNorm (LLaMA/Mistral/Gemma normalization)
+
+```rust
+use blitz_rmsnorm::rms_norm;
+
+let mut hidden = vec![/* your hidden states */];
+let weight = vec![1.0_f32; hidden_size];  // learned scale parameter
+rms_norm(&mut hidden, &weight, hidden_size, 1e-6);
+// Normalized in-place — faster than LayerNorm (no mean subtraction)
+```
+
 ---
 
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────┐
-│          Your WASI Runtime (CF Workers, etc.)    │
-├─────────────────────────────────────────────────┤
-│  blitz-embedding → blitz-attention → blitz-kv   │
-│  blitz-rope → blitz-swiglu → blitz-fused-mlp   │
-│  blitz-layernorm-gelu → cc-faculty-wasm         │
-└─────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────┐
+│           Your WASI Runtime (CF Workers, etc.)        │
+├──────────────────────────────────────────────────────┤
+│  blitz-embedding → blitz-attention → blitz-kv-cache  │
+│  blitz-rope → blitz-rmsnorm → blitz-swiglu           │
+│  blitz-fused-mlp → blitz-layernorm-gelu              │
+│  cc-faculty-wasm                                      │
+└──────────────────────────────────────────────────────┘
          Pure Rust · No allocator required
          No CUDA · No runtime deps · WASI P2
 ```
@@ -94,9 +107,9 @@ let output = swiglu_forward(&x, &gate_weight, &up_weight, &down_weight, &config)
 
 | Option | Price | Includes |
 |--------|-------|---------|
-| Single kernel | **$1,500** | Pre-compiled WASM + source + 30-min call |
-| Bundle of 3 | **$3,500** | 3 kernels + integration session + priority support |
-| Full catalog (8) | Contact us | All kernels + dedicated integration support |
+| Single kernel | **$1,500** | Pre-compiled WASM + source + 30-min integration call |
+| Full catalog (9) | **$8,500** | All 9 kernels + dedicated integration support + priority updates |
+| Support add-on | **$200/mo** | Priority email, patch releases, architecture review |
 
 **[→ Purchase at blitzkernels.pages.dev](https://blitzkernels.pages.dev)**  
 **Contact:** hello@teamadapt.dev
