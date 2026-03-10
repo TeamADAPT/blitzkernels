@@ -1,0 +1,12 @@
+[package]
+name = "blitz-rmsnorm"
+version = "0.1.0"
+edition = "2021"
+description = "RMS LayerNorm kernel for LLaMA/Mistral/Gemma — pure Rust, WASM-portable"
+license = "MIT"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+[features]
+default = ["std"]
+std = []
