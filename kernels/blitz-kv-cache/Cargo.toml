@@ -1,0 +1,16 @@
+[package]
+name = "blitz-kv-cache"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Dynamic KV-cache with paged attention for long-context serving"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = ["std"]
+std = []
+
+[dependencies]

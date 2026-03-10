@@ -1,0 +1,17 @@
+[package]
+name = "blitz-attention"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Fused multi-head attention kernel for H200 in Rust + WASM64"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = ["std"]
+std = []
+
+[dependencies]
+libm = { version = "0.2", optional = true, default-features = false }

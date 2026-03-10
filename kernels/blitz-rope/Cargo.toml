@@ -1,0 +1,14 @@
+[package]
+name = "blitz-rope"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Rotary Position Embeddings (RoPE) kernel — LLaMA/Mistral/Gemma compatible, pure Rust + WASM"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = ["std"]
+std = []

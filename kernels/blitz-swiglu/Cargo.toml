@@ -1,0 +1,17 @@
+[package]
+name = "blitz-swiglu"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "SwiGLU activation kernel for LLaMA/Mistral-class FFN blocks — pure Rust + WASM"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = ["std"]
+std = []
+
+[dependencies]
+libm = { version = "0.2", optional = true, default-features = false }
