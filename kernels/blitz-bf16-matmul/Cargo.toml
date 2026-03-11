@@ -1,0 +1,13 @@
+[package]
+name = "blitz-bf16-matmul"
+version = "0.1.0"
+edition = "2021"
+description = "BF16 matrix multiplication — H100/A100 inference dtype, pure Rust, WASM-portable"
+license = "MIT"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = ["std"]
+std = []

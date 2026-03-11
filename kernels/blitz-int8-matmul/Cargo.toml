@@ -1,0 +1,13 @@
+[package]
+name = "blitz-int8-matmul"
+version = "0.1.0"
+edition = "2021"
+description = "INT8 quantized matrix multiplication — 4x memory bandwidth reduction, pure Rust, WASM-portable"
+license = "MIT"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = ["std"]
+std = []

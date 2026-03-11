@@ -8,6 +8,8 @@ members = [
     "kernels/blitz-fused-mlp",
     "kernels/blitz-swiglu",
     "kernels/blitz-rmsnorm",
+    "kernels/blitz-int8-matmul",
+    "kernels/blitz-bf16-matmul",
 ]
 
 [workspace.package]
