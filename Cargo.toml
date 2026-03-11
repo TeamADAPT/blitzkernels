@@ -11,6 +11,7 @@ members = [
     "kernels/blitz-int8-matmul",
     "kernels/blitz-bf16-matmul",
     "kernels/blitz-flash-attention",
+    "kernels/blitz-token-sampler",
 ]
 
 [workspace.package]

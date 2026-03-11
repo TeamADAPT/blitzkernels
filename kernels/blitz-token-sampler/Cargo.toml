@@ -1,0 +1,13 @@
+[package]
+name = "blitz-token-sampler"
+version = "0.1.0"
+edition = "2021"
+description = "LLM token sampling — greedy, top-k, top-p (nucleus), temperature scaling — pure Rust, WASM-portable"
+license = "MIT"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = ["std"]
+std = []
