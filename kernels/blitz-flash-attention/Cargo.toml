@@ -1,0 +1,13 @@
+[package]
+name = "blitz-flash-attention"
+version = "0.1.0"
+edition = "2021"
+description = "Flash Attention v2 — tiled block attention, O(N) memory, causal masking, GQA — pure Rust, WASM-portable"
+license = "MIT"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = ["std"]
+std = []

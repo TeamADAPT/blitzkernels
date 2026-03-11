@@ -10,6 +10,7 @@ members = [
     "kernels/blitz-rmsnorm",
     "kernels/blitz-int8-matmul",
     "kernels/blitz-bf16-matmul",
+    "kernels/blitz-flash-attention",
 ]
 
 [workspace.package]
