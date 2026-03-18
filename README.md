@@ -8,23 +8,22 @@
 [![built with Rust](https://img.shields.io/badge/built_with-Rust-orange)](https://www.rust-lang.org)
 [![target: wasm32-wasip2](https://img.shields.io/badge/target-wasm32--wasip2-purple)](https://wasi.dev)
 
-## Kernel Catalog — 13 Kernels Available
+## Kernel Catalog — 12 Kernels Available
 
 | Kernel | Description | Use Case |
 |--------|-------------|----------|
 | `blitz-embedding` | Batched token embedding · mean-pool · L2 norm | RAG, semantic search, feature extraction |
 | `blitz-attention` | Multi-head attention (MHA) with LSE | Transformer inference block |
+| `blitz-flash-attention` | Flash Attention v2 · tiled block · O(N) memory · GQA | Long-context serving |
 | `blitz-kv-cache` | Paged KV-cache · LRU/sliding-window eviction | Autoregressive generation |
-| `blitz-layernorm-gelu` | Fused LayerNorm + GELU activation | BERT/GPT FFN sublayer |
 | `blitz-rope` | Rotary position embeddings (RoPE) | LLaMA/Mistral position encoding |
+| `blitz-layernorm-gelu` | Fused LayerNorm + GELU activation | BERT/GPT FFN sublayer |
+| `blitz-rmsnorm` | RMS LayerNorm (no mean subtraction) | LLaMA/Mistral/Gemma normalization |
 | `blitz-fused-mlp` | Fused Linear→LayerNorm→GELU→Linear | Full FFN block (GPT-style) |
 | `blitz-swiglu` | SwiGLU gated activation | LLaMA 2/3, Mistral FFN |
-| `blitz-rmsnorm` | RMS LayerNorm (no mean subtraction) | LLaMA/Mistral/Gemma normalization |
 | `blitz-int8-matmul` | INT8 quantized matmul · 4× memory bandwidth | Quantized weight inference |
 | `blitz-bf16-matmul` | BF16 matmul · H100/TPU native dtype | Mixed-precision LLM inference |
-| `blitz-flash-attention` | Flash Attention v2 · tiled block · O(N) memory · GQA | Long-context serving |
 | `blitz-token-sampler` | Greedy / top-k / top-p (nucleus) / temperature sampling | LLM text generation |
-| `cc-faculty-wasm` | Claude Code cognitive substrate | Agent memory + reasoning integration |
 
 **[→ View full catalog and pricing](https://blitzkernels.pages.dev)**
 
@@ -92,12 +91,10 @@ rms_norm(&mut hidden, &weight, hidden_size, 1e-6);
 ┌──────────────────────────────────────────────────────┐
 │           Your WASI Runtime (CF Workers, etc.)        │
 ├──────────────────────────────────────────────────────┤
-│  blitz-embedding → blitz-attention → blitz-kv-cache  │
-│  blitz-rope → blitz-rmsnorm → blitz-swiglu           │
-│  blitz-fused-mlp → blitz-layernorm-gelu              │
-│  blitz-int8-matmul → blitz-bf16-matmul               │
-│  blitz-flash-attention → blitz-token-sampler          │
-│  cc-faculty-wasm                                      │
+│  blitz-embedding → blitz-attention → blitz-flash-attention  │
+│  blitz-kv-cache → blitz-rope → blitz-rmsnorm               │
+│  blitz-layernorm-gelu → blitz-fused-mlp → blitz-swiglu     │
+│  blitz-int8-matmul → blitz-bf16-matmul → blitz-token-sampler│
 └──────────────────────────────────────────────────────┘
          Pure Rust · No allocator required
          No CUDA · No runtime deps · WASI P2
@@ -115,7 +112,7 @@ rms_norm(&mut hidden, &weight, hidden_size, 1e-6);
 | Option | Price | Includes |
 |--------|-------|---------|
 | Single kernel | **$1,500** | Pre-compiled WASM + source + 30-min integration call |
-| Full catalog (13) | **$6,500** | All 13 kernels + dedicated integration support + priority updates |
+| Full catalog (12) | **$6,500** | All 12 kernels + dedicated integration support + priority updates |
 | Support add-on | **$200/mo** | Priority email, patch releases, architecture review |
 
 **[→ Purchase at blitzkernels.pages.dev](https://blitzkernels.pages.dev)**  
