@@ -29,6 +29,15 @@
 
 ---
 
+## Documentation
+
+| Guide | What | Time |
+|-------|------|------|
+| [QUICKSTART.md](QUICKSTART.md) | Deploy to Cloudflare Workers, wasmCloud, or native wasmtime | 10 min |
+| [TUTORIAL.md](TUTORIAL.md) | Full inference loop: flash attention → KV-cache → token sampling → generation | 20 min |
+
+---
+
 ## Why BlitzKernels?
 
 - **Pure Rust, zero unsafe** — memory-safe by construction, auditable
