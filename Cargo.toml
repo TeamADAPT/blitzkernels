@@ -12,6 +12,7 @@ members = [
     "kernels/blitz-bf16-matmul",
     "kernels/blitz-flash-attention",
     "kernels/blitz-token-sampler",
+    "tools/blitz-benchmark",
 ]
 
 [workspace.package]

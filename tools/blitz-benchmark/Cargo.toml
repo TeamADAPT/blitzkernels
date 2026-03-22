@@ -1,0 +1,24 @@
+[package]
+name = "blitz-benchmark"
+version = "0.1.0"
+edition = "2021"
+description = "Self-verifiable benchmark harness for BlitzKernels — generates p50/p95/p99 latency receipts"
+publish = false
+
+[[bin]]
+name = "blitz-benchmark"
+path = "src/main.rs"
+
+[dependencies]
+blitz-swiglu = { path = "../../kernels/blitz-swiglu" }
+blitz-embedding = { path = "../../kernels/blitz-embedding" }
+blitz-attention = { path = "../../kernels/blitz-attention" }
+blitz-kv-cache = { path = "../../kernels/blitz-kv-cache" }
+blitz-layernorm-gelu = { path = "../../kernels/blitz-layernorm-gelu" }
+blitz-fused-mlp = { path = "../../kernels/blitz-fused-mlp" }
+blitz-rope = { path = "../../kernels/blitz-rope" }
+blitz-rmsnorm = { path = "../../kernels/blitz-rmsnorm" }
+blitz-int8-matmul = { path = "../../kernels/blitz-int8-matmul" }
+blitz-bf16-matmul = { path = "../../kernels/blitz-bf16-matmul" }
+blitz-flash-attention = { path = "../../kernels/blitz-flash-attention" }
+blitz-token-sampler = { path = "../../kernels/blitz-token-sampler" }
