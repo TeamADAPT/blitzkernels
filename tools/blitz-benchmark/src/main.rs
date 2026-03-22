@@ -828,3 +828,90 @@ fn generate_report(results: &[BenchResult], build_hash: &str) -> String {
 
     report
 }
+
+// ── Tests ────────────────────────────────────────────────────────────────────
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn make_result(samples_us: Vec<f64>) -> BenchResult {
+        BenchResult {
+            kernel_name: "test-kernel".to_string(),
+            latency_samples_us: samples_us,
+            batch_size: 1,
+            seq_length: SEQ_LEN,
+            precision: "f32".to_string(),
+        }
+    }
+
+    #[test]
+    fn test_percentile_ordering_p50_leq_p95() {
+        let r = make_result((1..=100).map(|x| x as f64).collect());
+        assert!(r.p50_ms() <= r.p95_ms(), "p50 must be <= p95");
+    }
+
+    #[test]
+    fn test_percentile_ordering_p95_leq_p99() {
+        let r = make_result((1..=100).map(|x| x as f64).collect());
+        assert!(r.p95_ms() <= r.p99_ms(), "p95 must be <= p99");
+    }
+
+    #[test]
+    fn test_sla_pass_for_fast_kernel() {
+        // All samples well below 100ms SLA (100_000 µs)
+        let r = make_result(vec![100.0; 50]);
+        assert_eq!(r.sla_verdict(), "PASS");
+    }
+
+    #[test]
+    fn test_sla_fail_for_slow_kernel() {
+        // p95 above 100ms SLA
+        let mut samples = vec![50_000.0f64; 45]; // 45 fast samples
+        samples.extend(vec![200_000.0f64; 5]);   // 5 slow samples push p95 over
+        let r = make_result(samples);
+        assert_eq!(r.sla_verdict(), "FAIL");
+    }
+
+    #[test]
+    fn test_throughput_is_positive() {
+        let r = make_result(vec![1000.0; 50]); // 1ms latency
+        assert!(r.throughput_tokens_per_sec() > 0.0);
+    }
+
+    #[test]
+    fn test_rand_f32_vec_deterministic() {
+        let a = rand_f32_vec(64);
+        let b = rand_f32_vec(64);
+        assert_eq!(a, b, "PRNG must be deterministic across calls");
+    }
+
+    #[test]
+    fn test_rand_f32_vec_length() {
+        let v = rand_f32_vec(128);
+        assert_eq!(v.len(), 128);
+    }
+
+    #[test]
+    fn test_zeros_length_and_values() {
+        let v = zeros(32);
+        assert_eq!(v.len(), 32);
+        assert!(v.iter().all(|&x| x == 0.0));
+    }
+
+    #[test]
+    fn test_all_kernels_run_without_panic() {
+        // Smoke test: every kernel executes at bs=1 without panicking
+        let kernels: Vec<fn(usize) -> BenchResult> = vec![
+            bench_swiglu, bench_embedding, bench_attention, bench_flash_attention,
+            bench_kv_cache, bench_layernorm_gelu, bench_fused_mlp, bench_rope,
+            bench_rmsnorm, bench_int8_matmul, bench_bf16_matmul, bench_token_sampler,
+        ];
+        for bench_fn in kernels {
+            let r = bench_fn(1);
+            assert!(!r.kernel_name.is_empty());
+            assert!(!r.latency_samples_us.is_empty());
+            assert!(r.p50_ms() > 0.0);
+        }
+    }
+}
